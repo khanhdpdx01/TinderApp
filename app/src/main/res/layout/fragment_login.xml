@@ -21,26 +21,38 @@
         android:layout_marginBottom="50dp"/>
 
     <EditText
+        android:id="@+id/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
         android:inputType="textEmailAddress"
-        android:id="@+id/email"/>
+        android:minHeight="48dp" />
+
     <EditText
+        android:id="@+id/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
         android:hint="Password"
-        android:id="@+id/password"/>
+        android:inputType="textPassword"
+        android:minHeight="48dp" />
 
-    <Button
-        android:layout_width="wrap_content"
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="30dp"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_diagnostic"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:layout_marginTop="10dp"
+        android:text="ĐĂNG NHẬP"
         android:layout_gravity="center"
-        android:backgroundTint="@color/primaryColor"
-        android:id="@+id/btn_login"/>
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:textColor="#fff"
+        android:textSize="20sp"
+        android:background="@drawable/custom_button"></androidx.appcompat.widget.AppCompatButton>
 
     <TextView
         android:id="@+id/tv_not_account"
@@ -48,5 +60,5 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="#ff0000"
-        android:text="Chưa có tài khoản"/>
+        android:text="Chưa có tài khoản ?"/>
 </LinearLayout>

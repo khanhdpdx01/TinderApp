@@ -3,11 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Mobile/DatingApp/app/src/main/res/drawable/custom_button.xml" value="0.22" />
+        <entry key="..\:/Mobile/DatingApp/app/src/main/res/drawable/ic_add_circle_black_24dp.xml" value="0.2445" />
+        <entry key="..\:/Mobile/DatingApp/app/src/main/res/drawable/normal_button.xml" value="0.2445" />
         <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/fragment_home.xml" value="0.15364583333333334" />
-        <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/fragment_login.xml" value="0.2" />
+        <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/fragment_login.xml" value="0.264" />
         <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/fragment_main.xml" value="0.1" />
-        <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/fragment_register.xml" value="0.1984375" />
+        <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/fragment_register.xml" value="0.264" />
+        <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/fragment_register_age.xml" value="0.264" />
+        <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/fragment_register_gender.xml" value="0.21302083333333333" />
+        <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/fragment_register_hobby.xml" value="0.23854166666666668" />
+        <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/fragment_register_upload_image.xml" value="0.23854166666666668" />
       </map>
     </option>
   </component>

@@ -22,12 +22,48 @@
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
-            android:id="@+id/action_registerFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            android:id="@+id/action_registerFragment_to_registerAgeFragment"
+            app:destination="@id/registerAgeFragment" />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.datingapp.view.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/registerAgeFragment"
+        android:name="com.example.datingapp.view.RegisterAgeFragment"
+        android:label="fragment_register_age"
+        tools:layout="@layout/fragment_register_age" >
+        <action
+            android:id="@+id/action_registerAgeFragment_to_registerGenderFragment"
+            app:destination="@id/registerGenderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerGenderFragment"
+        android:name="com.example.datingapp.view.RegisterGenderFragment"
+        android:label="fragment_register_gender"
+        tools:layout="@layout/fragment_register_gender" >
+        <action
+            android:id="@+id/action_registerGenderFragment_to_registerHobbyFragment"
+            app:destination="@id/registerHobbyFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerUploadImageFragment"
+        android:name="com.example.datingapp.view.RegisterUploadImageFragment"
+        android:label="fragment_register_upload_image"
+        tools:layout="@layout/fragment_register_upload_image" >
+        <action
+            android:id="@+id/action_registerUploadImageFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerHobbyFragment"
+        android:name="com.example.datingapp.view.RegisterHobbyFragment"
+        android:label="fragment_register_hobby"
+        tools:layout="@layout/fragment_register_hobby" >
+        <action
+            android:id="@+id/action_registerHobbyFragment_to_registerUploadImageFragment"
+            app:destination="@id/registerUploadImageFragment" />
+    </fragment>
 </navigation>
