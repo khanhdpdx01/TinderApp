@@ -10,119 +10,130 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp">
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="8dp">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
+            android:text="Sở thích"
             android:textSize="50sp"
-            android:text="Sở thích" />
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_centerInParent="true">
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="10dp"
+                android:text="* Chọn ít nhất một sở thích"
+                android:textSize="20sp" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_male"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/btn_hobby_1"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/normal_button"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
                     android:text="Thể thao"
-                    android:layout_gravity="center"
                     android:textAllCaps="false"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:textSize="20sp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/normal_button"
-                    ></androidx.appcompat.widget.AppCompatButton>
+                    android:textSize="20sp"></androidx.appcompat.widget.AppCompatButton>
+
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_male"
+                    android:id="@+id/btn_hobby_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/normal_button"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
                     android:text="Du lịch"
-                    android:layout_gravity="center"
                     android:textAllCaps="false"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:textSize="20sp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/normal_button"
-                    ></androidx.appcompat.widget.AppCompatButton>
+                    android:textSize="20sp"></androidx.appcompat.widget.AppCompatButton>
+
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_male"
+                    android:id="@+id/btn_hobby_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/normal_button"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
                     android:text="Âm nhạc"
-                    android:layout_gravity="center"
                     android:textAllCaps="false"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:textSize="20sp"
-                    android:background="@drawable/normal_button"
-                    ></androidx.appcompat.widget.AppCompatButton>
-            </LinearLayout>
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="20dp"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_male"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Nghệ thuật"
-                    android:layout_gravity="center"
-                    android:textAllCaps="false"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:textSize="20sp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/normal_button"
-                    ></androidx.appcompat.widget.AppCompatButton>
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btn_male"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Chơi game"
-                    android:layout_gravity="center"
-                    android:textAllCaps="false"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:textSize="20sp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/normal_button"
-                    ></androidx.appcompat.widget.AppCompatButton>
+                    android:textSize="20sp"></androidx.appcompat.widget.AppCompatButton>
             </LinearLayout>
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="20dp"/>
+                android:layout_height="20dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_hobby_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/normal_button"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="Nghệ thuật"
+                    android:textAllCaps="false"
+                    android:textSize="20sp"></androidx.appcompat.widget.AppCompatButton>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_hobby_5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/normal_button"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:text="Chơi game"
+                    android:textAllCaps="false"
+                    android:textSize="20sp"></androidx.appcompat.widget.AppCompatButton>
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_next"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="TIẾP TỤC"
                 android:layout_gravity="center"
+                android:background="@drawable/custom_button"
                 android:paddingLeft="50dp"
-                android:paddingRight="50dp"
                 android:paddingTop="15dp"
+                android:paddingRight="50dp"
                 android:paddingBottom="15dp"
+                android:text="TIẾP TỤC"
                 android:textColor="#fff"
-                android:textSize="20sp"
-                android:background="@drawable/custom_button"></androidx.appcompat.widget.AppCompatButton>
+                android:textSize="20sp"></androidx.appcompat.widget.AppCompatButton>
 
         </LinearLayout>
     </RelativeLayout>

@@ -14,10 +14,7 @@ import androidx.navigation.Navigation;
 
 import com.example.datingapp.R;
 import com.example.datingapp.databinding.FragmentRegisterBinding;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.datingapp.entity.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,8 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
  * create an instance of this fragment.
  */
 public class RegisterFragment extends Fragment {
-    private final FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
     private FragmentRegisterBinding binding;
+    private User user;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,45 +46,48 @@ public class RegisterFragment extends Fragment {
         binding = FragmentRegisterBinding.bind(view);
 
 
-        binding.btnRegister.setOnClickListener(view1 -> {
+        binding.btnNext.setOnClickListener(view1 -> {
             String email = binding.email.getText().toString();
             String password = binding.password.getText().toString();
             String confirmPassword = binding.confirmPassword.getText().toString();
 
             if (TextUtils.isEmpty(email)) {
-                Toast.makeText(getContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Vui lòng nhập email!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (TextUtils.isEmpty(password)) {
-                Toast.makeText(getContext(), "Enter password!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Vui lòng nhập mật khẩu!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if(!isEmail(email)) {
+                Toast.makeText(getContext(), "Email không đúng định dạng!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (password.length() < 6) {
-                Toast.makeText(getContext(), "Password too short, enter minimum 6 characters!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Mật khẩu quá ngắn, nhập trên 6 kí tự!", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (!password.equals(confirmPassword)) {
-                Toast.makeText(getContext(), "Password is different to confirm password", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Mật khẩu không trùng với mật khẩu xác nhận", Toast.LENGTH_SHORT).show();
                 return;
             }
-            mFirebaseAuth.createUserWithEmailAndPassword(email, password)
-                    .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                        @Override
-                        public void onSuccess(AuthResult authResult) {
-                            Toast.makeText(getContext(), "Thành công", Toast.LENGTH_SHORT).show();
-                            Navigation.findNavController(view).navigate(R.id.loginFragment);
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+
+            user = new User();
+            user.setEmail(email);
+            user.setPassword(password);
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("user", user);
+            Navigation.findNavController(view1).navigate(R.id.action_registerFragment_to_registerAgeFragment, bundle);
         });
     }
 
+    private boolean isEmail(String email) {
+        String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
+        return email.matches(regex);
+    }
 }

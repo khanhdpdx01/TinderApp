@@ -21,15 +21,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_centerInParent="true">
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:text="* Chọn ít nhất 2 ảnh"
-                android:textSize="20sp"
-                android:layout_marginLeft="10dp"/>
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -61,7 +61,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerInParent="true"
-                                android:elevation="20dp"
                                 android:text="1"
                                 android:textSize="60dp"
                                 android:textStyle="bold" />
@@ -318,21 +317,23 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="50dp"/>
+                android:layout_height="50dp" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_diagnostic"
+                android:id="@+id/btn_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="ĐĂNG KÍ"
                 android:layout_gravity="center"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:background="@drawable/custom_button"
                 android:paddingLeft="50dp"
-                android:paddingRight="50dp"
                 android:paddingTop="15dp"
+                android:paddingRight="50dp"
                 android:paddingBottom="15dp"
+                android:text="ĐĂNG KÍ"
                 android:textColor="#fff"
-                android:textSize="20sp"
-                android:background="@drawable/custom_button"></androidx.appcompat.widget.AppCompatButton>
+                android:textSize="20sp"></androidx.appcompat.widget.AppCompatButton>
 
         </LinearLayout>
 

@@ -1,59 +1,32 @@
 package com.example.datingapp.view;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.datingapp.R;
+import com.example.datingapp.databinding.FragmentRegisterGenderBinding;
+import com.example.datingapp.entity.User;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RegisterGenderFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class RegisterGenderFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public RegisterGenderFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RegisterGenderFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RegisterGenderFragment newInstance(String param1, String param2) {
-        RegisterGenderFragment fragment = new RegisterGenderFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private User user;
+    private FragmentRegisterGenderBinding binding;
+    private Button btnMale, btnFemale;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            user = (User) getArguments().getSerializable("user");
         }
     }
 
@@ -62,5 +35,34 @@ public class RegisterGenderFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_register_gender, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        binding = FragmentRegisterGenderBinding.bind(view);
+
+        btnMale = binding.btnMale;
+        btnFemale = binding.btnFemale;
+
+        btnMale.setOnClickListener(view1 -> {
+            btnMale.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#40ffdc")));
+            btnFemale.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#ffffff")));
+            user.setGender(true);
+        });
+
+        btnFemale.setOnClickListener(view1 -> {
+            btnFemale.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#40ffdc")));
+            btnMale.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#ffffff")));
+            user.setGender(false);
+        });
+
+        binding.btnNext.setOnClickListener(view1 -> {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("user", user);
+            Navigation.findNavController(view1).navigate(R.id.action_registerGenderFragment_to_registerHobbyFragment, bundle);
+        });
+
     }
 }
