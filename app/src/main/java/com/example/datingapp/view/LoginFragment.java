@@ -1,6 +1,8 @@
 package com.example.datingapp.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.example.datingapp.HomeActivity;
 import com.example.datingapp.R;
 import com.example.datingapp.databinding.FragmentLoginBinding;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -73,7 +76,14 @@ public class LoginFragment extends Fragment {
                         @Override
                         public void onSuccess(AuthResult authResult) {
                             Toast.makeText(getContext(), "Thành công", Toast.LENGTH_SHORT).show();
-                            Navigation.findNavController(view).navigate(R.id.homeFragment);
+//                            Navigation.findNavController(view).navigate(R.id.homeFragment);
+
+                            // transfer to home activity
+                            new Handler().postDelayed(() -> {
+                                Intent intent = new Intent(getActivity(), HomeActivity.class);
+                                startActivity(intent);
+                                getActivity().finish();
+                            }, 1000);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {

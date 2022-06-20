@@ -87,9 +87,9 @@ public class RegisterUploadImageFragment extends Fragment {
             } else {
                 ArrayList<String> profileImageNames = new ArrayList<>();
 
-                registerAccountWithEmail(user.getEmail(), user.getPassword(), view1);
+                String userId = registerAccountWithEmail(user.getEmail(), user.getPassword(), view1);
                 // luu thong tin user vao realtime database
-                String userId = saveUser();
+                saveUser(userId);
                 // upload anh len cloud storage
                 imageHasChoice.forEach((key, value) -> {
                     String imageName = userId + "_" + key.toString();
@@ -150,7 +150,7 @@ public class RegisterUploadImageFragment extends Fragment {
         imageHasChoice.put(currentImageChoice, bMapScaled);
     }
 
-    private void registerAccountWithEmail(String email, String password, View view) {
+    private String registerAccountWithEmail(String email, String password, View view) {
         mFirebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
@@ -165,17 +165,20 @@ public class RegisterUploadImageFragment extends Fragment {
                         Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+        return mFirebaseAuth.getCurrentUser().getUid();
     }
 
-    private String saveUser() {
+    private String saveUser(String userId) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("users");
 
-        String userId = UUID.randomUUID().toString();
-        Map<String, User> users = new HashMap<>();
-        users.put(userId, new User(user.isGender(), user.getDateOfBirth(), user.getHobbies()));
+//        String userId = UUID.randomUUID().toString();
+        Map<String, Object> users = new HashMap<>();
+        users.put("gender", this.user.isGender());
+        users.put("dateOfBirth", this.user.getDateOfBirth());
+        users.put("hobbies", this.user.getHobbies());
 
-        ref.setValue(users);
+        ref.child(userId).setValue(users);
 
         return userId;
     }
