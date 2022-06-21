@@ -1,8 +1,8 @@
 package com.example.datingapp.adapters;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.datingapp.R;
 import com.example.datingapp.entity.Like;
+import com.example.datingapp.view.ChatPrivateFragment;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -66,7 +68,7 @@ public class LikesAdapter extends RecyclerView.Adapter<LikesAdapter.ContactViewH
     }
 
     public class ContactViewHolder extends RecyclerView.ViewHolder {
-        public TextView likeName, likeId;
+        public TextView likeName;
         public ImageView likeImage;
         public LinearLayout likeLayout;
 
@@ -80,10 +82,20 @@ public class LikesAdapter extends RecyclerView.Adapter<LikesAdapter.ContactViewH
                 @Override
                 public void onClick(View view) {
                     Like like = likeList.get(getAdapterPosition());
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("user", like);
-                    Navigation.findNavController(view)
-                            .navigate(R.id.action_chatFragment_to_chatPrivateFragment, bundle);
+
+//                    Log.d("debug", "Id container " + ((ViewGroup)view.getParent()).getId());
+//                    Log.d("debug", "Id container " + R.id.fragmentContainerView);
+
+//                    Bundle bundle = new Bundle();
+//                    bundle.putSerializable("user", like);
+//                    Navigation.findNavController(viewActivity)
+//                            .navigate(R.id.action_activityFragment_to_chatPrivateFragment, bundle);
+
+                    ((FragmentActivity)context).getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.nav_host_fragment_container_home, new ChatPrivateFragment(like))
+                        .addToBackStack(null)
+                        .commit();
+//                    NavHostFragment.findNavController(new ActivityFragment)
                 }
             });
         }

@@ -1,6 +1,8 @@
 package com.example.datingapp.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +14,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.example.datingapp.HomeActivity;
 import com.example.datingapp.R;
 import com.example.datingapp.databinding.FragmentRegisterBinding;
 import com.example.datingapp.entity.User;
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +33,15 @@ public class RegisterFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+        }
+
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            // transfer to home activity
+            new Handler().postDelayed(() -> {
+                Intent intent = new Intent(getActivity(), HomeActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+            }, 500);
         }
     }
 

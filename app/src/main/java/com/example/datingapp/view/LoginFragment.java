@@ -32,6 +32,15 @@ public class LoginFragment extends Fragment {
         if (getArguments() != null) {
 
         }
+
+//        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+//            // transfer to home activity
+//            new Handler().postDelayed(() -> {
+//                Intent intent = new Intent(getActivity(), HomeActivity.class);
+//                startActivity(intent);
+//                getActivity().finish();
+//            }, 500);
+//        }
     }
 
     @Override
@@ -83,7 +92,7 @@ public class LoginFragment extends Fragment {
                                 Intent intent = new Intent(getActivity(), HomeActivity.class);
                                 startActivity(intent);
                                 getActivity().finish();
-                            }, 1000);
+                            }, 500);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {

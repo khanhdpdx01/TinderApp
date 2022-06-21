@@ -13,9 +13,6 @@
         <action
             android:id="@+id/action_chatFragment_to_feedFragment"
             app:destination="@id/feedFragment" />
-        <action
-            android:id="@+id/action_chatFragment_to_chatPrivateFragment"
-            app:destination="@id/chatPrivateFragment" />
     </fragment>
     <fragment
         android:id="@+id/feedFragment"
@@ -67,7 +64,7 @@
         android:label="fragment_chat_private"
         tools:layout="@layout/fragment_chat_private" >
         <action
-            android:id="@+id/action_chatPrivateFragment_to_chatFragment"
-            app:destination="@id/chatFragment" />
+            android:id="@+id/action_chatPrivateFragment_to_activityFragment"
+            app:destination="@id/activityFragment" />
     </fragment>
 </navigation>

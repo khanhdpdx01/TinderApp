@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/drawable/bg_text_chat_left.xml" value="0.1375" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/drawable/bg_text_chat_right.xml" value="0.1" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/drawable/bottom_navigation_color_selector.xml" value="0.14" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/drawable/dot_message.xml" value="0.14" />
@@ -16,7 +17,7 @@
         <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/layout/fragment_account.xml" value="0.22447916666666667" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/layout/fragment_activity.xml" value="0.22447916666666667" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/layout/fragment_chat.xml" value="0.22447916666666667" />
-        <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/layout/fragment_chat_private.xml" value="0.22447916666666667" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/layout/fragment_chat_private.xml" value="0.14" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/layout/fragment_feed.xml" value="0.22447916666666667" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/layout/fragment_home.xml" value="0.22447916666666667" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/layout/fragment_login.xml" value="0.22447916666666667" />
@@ -25,6 +26,7 @@
         <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/layout/fragment_register_gender.xml" value="0.22447916666666667" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/layout/fragment_register_hobby.xml" value="0.22447916666666667" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/layout/fragment_register_upload_image.xml" value="0.22447916666666667" />
+        <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/layout/fragment_swipe.xml" value="0.140625" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/layout/like_item.xml" value="0.22447916666666667" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/layout/message_item.xml" value="0.25" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/menu/bottom_nav_menu_main.xml" value="0.22447916666666667" />

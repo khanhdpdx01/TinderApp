@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -71,6 +72,7 @@ public class ChatFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         binding = FragmentChatBinding.bind(view);
 
+
         messageList = new ArrayList<>();
         messagesAdapter = new MessagesAdapter(getContext(), messageList);
 
@@ -88,6 +90,7 @@ public class ChatFragment extends Fragment {
         binding.recyclerViewLikes.setAdapter(contactsAdapter);
 
         getUserMatchId();
+
     }
 
     // retrieve data user through key

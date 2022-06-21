@@ -1,18 +1,18 @@
 package com.example.datingapp.view;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +24,6 @@ import com.example.datingapp.adapters.ChatAdapter;
 import com.example.datingapp.databinding.FragmentChatPrivateBinding;
 import com.example.datingapp.entity.Chat;
 import com.example.datingapp.entity.Like;
-import com.example.datingapp.entity.Message;
 import com.example.datingapp.enumurator.TypeMessage;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -38,11 +37,8 @@ import com.google.firebase.storage.StorageReference;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ChatPrivateFragment extends Fragment {
 
@@ -54,16 +50,11 @@ public class ChatPrivateFragment extends Fragment {
     private DatabaseReference mDatabaseUser, mDatabaseChat;
 
     public ChatPrivateFragment() {
-        // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
-    public static ChatPrivateFragment newInstance(String param1, String param2) {
-        ChatPrivateFragment fragment = new ChatPrivateFragment();
-        Bundle args = new Bundle();
-
-        fragment.setArguments(args);
-        return fragment;
+    public ChatPrivateFragment(Like like) {
+        // Required empty public constructor
+        this.user = like;
     }
 
     @Override
@@ -73,6 +64,10 @@ public class ChatPrivateFragment extends Fragment {
 
         if (getArguments() != null) {
             user = (Like) getArguments().getSerializable("user");
+        }
+
+        if (getActivity().findViewById(R.id.bottom_navigation) != null) {
+            getActivity().findViewById(R.id.bottom_navigation).setVisibility(View.GONE);
         }
     }
 
@@ -88,11 +83,11 @@ public class ChatPrivateFragment extends Fragment {
         binding = FragmentChatPrivateBinding.bind(view);
 
         mDatabaseChat = FirebaseDatabase.getInstance().getReference().child("chats");
+        mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("users")
+                .child(this.currentUserId).child("connections").child("matches");
 
         if (user != null) {
-            mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("users")
-                    .child(currentUserId).child("connections").child("matches")
-                    .child(user.getId().trim()).child("ChatId");
+            mDatabaseUser = mDatabaseUser.child(user.getId()).child("chat_id");
 
             binding.textName.setText(user.getName());
             StorageReference storageReference  = FirebaseStorage.getInstance().getReference()
@@ -123,8 +118,12 @@ public class ChatPrivateFragment extends Fragment {
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                Navigation.findNavController(view).navigate(R.id.chatFragment, bundle);
+                getActivity().findViewById(R.id.bottom_navigation).setVisibility(View.VISIBLE);
+
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.nav_host_fragment_container_home, new ActivityFragment());
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
@@ -140,10 +139,16 @@ public class ChatPrivateFragment extends Fragment {
                     binding.btnSend.setImageDrawable(
                             getResources().getDrawable(R.drawable.ic_baseline_keyboard_voice_24,
                                     getActivity().getTheme()));
+                    binding.btnLink.setVisibility(View.VISIBLE);
+                    binding.btnCamera.setVisibility(View.VISIBLE);
+                    binding.btnEmoticon.setVisibility(View.VISIBLE);
                 } else {
                     binding.btnSend.setImageDrawable(
                             getResources().getDrawable(R.drawable.ic_baseline_send_24,
                                     getActivity().getTheme()));
+                    binding.btnLink.setVisibility(View.GONE);
+                    binding.btnCamera.setVisibility(View.GONE);
+                    binding.btnEmoticon.setVisibility(View.GONE);
                 }
             }
 
@@ -170,15 +175,11 @@ public class ChatPrivateFragment extends Fragment {
     }
 
     private void sendTextMessage(String text) {
-        Date date = Calendar.getInstance().getTime();
-        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-        String today = format.format(date);
+        String today = format.format(new Date());
 
-        Calendar currentDateTime = Calendar.getInstance();
-        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat df = new SimpleDateFormat("hh:mm a");
-        String currentTime = df.format(currentDateTime);
+        String currentTime = df.format(new Date());
 
         DatabaseReference newMessageDb = mDatabaseChat.push();
 
@@ -189,11 +190,12 @@ public class ChatPrivateFragment extends Fragment {
     }
 
     private void getChatId() {
-        mDatabaseUser.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        mDatabaseUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    String chatId = dataSnapshot.getValue().toString();
+                    String chatId = dataSnapshot.getValue(String.class);
                     mDatabaseChat = mDatabaseChat.child(chatId);
                     getChatMessages(chatId);
                 }
@@ -201,7 +203,7 @@ public class ChatPrivateFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.d("Error", "data change event failure");
             }
         });
     }
@@ -210,13 +212,11 @@ public class ChatPrivateFragment extends Fragment {
         mDatabaseChat.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if(dataSnapshot.exists()){
-                    if (dataSnapshot.exists()) {
-                        Chat chat = dataSnapshot.getValue(Chat.class);
-                        chatList.add(chat);
-                        chatAdapter.setChatList(chatList);
-                        chatAdapter.notifyDataSetChanged();
-                    }
+                if (dataSnapshot.exists()) {
+                    Chat chat = dataSnapshot.getValue(Chat.class);
+                    chatList.add(0, chat);
+                    chatAdapter.setChatList(chatList);
+                    chatAdapter.notifyDataSetChanged();
                 }
 
             }
