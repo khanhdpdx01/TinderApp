@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,7 @@ import android.widget.Toast;
 
 import com.example.datingapp.R;
 import com.example.datingapp.Utils;
-import com.example.datingapp.adapters.ViewPagerAdapter;
+import com.example.datingapp.adapters.ViewPagerAdapterSwipe;
 import com.example.datingapp.databinding.FragmentSwipeBinding;
 import com.example.datingapp.entity.User;
 import com.example.datingapp.utils.DepthPageTransformer;
@@ -36,7 +37,7 @@ import java.util.List;
 public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
     private View rootLayout;
     ViewPager viewPaper;
-    ViewPagerAdapter adapter;
+    ViewPagerAdapterSwipe adapter;
     DatabaseReference users;
     FragmentSwipeBinding binding;
 
@@ -61,8 +62,13 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot userSnapshot:dataSnapshot.getChildren()){
                     userList.add(userSnapshot.getValue(User.class));
-                    iFireBaseLoadDone.onFirebaseLoadSuccess(userList.get(0).getProfileImages());
+                    userList.forEach(
+                            user-> {
+                                Log.d("User1", user.getProfileImages().get(0));
+                            }
+                    );
                 }
+                iFireBaseLoadDone.onFirebaseLoadSuccess(userList.get(0).getProfileImages());
             }
 
             @Override
@@ -95,7 +101,7 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
 
     @Override
     public void onFirebaseLoadSuccess(List<String> userImages) {
-        adapter = new ViewPagerAdapter(this.getContext(), userImages);
+        adapter = new ViewPagerAdapterSwipe(this.getContext(), userImages);
         viewPaper.setAdapter(adapter);
     }
     @Override
