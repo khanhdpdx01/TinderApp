@@ -30,6 +30,13 @@
         <entry key="..\:/DUT_learn/HK6/ltdd/endterm/TinderApp/app/src/main/res/layout/like_item.xml" value="0.3625" />
         <entry key="..\:/DUT_learn/HK6/ltdd/endterm/TinderApp/app/src/main/res/layout/message_item.xml" value="0.3625" />
         <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/fragment_account.xml" value="0.13385416666666666" />
+        <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/fragment_activity.xml" value="0.13385416666666666" />
+        <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/fragment_chat.xml" value="0.13385416666666666" />
+        <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/fragment_home.xml" value="0.12952898550724637" />
+        <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/fragment_register.xml" value="0.12952898550724637" />
+        <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/fragment_register_upload_image.xml" value="0.15760869565217392" />
+        <entry key="..\:/Mobile/DatingApp/app/src/main/res/layout/fragment_swipe.xml" value="0.13385416666666666" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/drawable/bg_text_chat_left.xml" value="0.1375" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/drawable/bg_text_chat_right.xml" value="0.1" />
         <entry key="..\:/Users/Admin/AndroidStudioProjects/TinderApp/app/src/main/res/drawable/bottom_navigation_color_selector.xml" value="0.14" />
