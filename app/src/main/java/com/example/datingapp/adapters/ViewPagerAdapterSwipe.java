@@ -54,7 +54,7 @@ public class ViewPagerAdapterSwipe extends PagerAdapter {
         View view = inflater.inflate(R.layout.cart_img, container, false);
         //view
         ImageView images = (ImageView) view.findViewById(R.id.user_image);
-        ImageView imgProfile = (ImageView) view.findViewById(R.id.image_profile);
+        ImageView imgProfile = (ImageView) view.findViewById(R.id.img_profileswipe);
         TextView name = (TextView) view.findViewById(R.id.name);
         TextView Age = (TextView) view.findViewById(R.id.age);
         Log.d("Userima", userImages.get(position));
@@ -66,15 +66,20 @@ public class ViewPagerAdapterSwipe extends PagerAdapter {
                 Glide.with(context)
                         .load(uri)
                         .into(images));
-//        StorageReference storageReference1 = FirebaseStorage.getInstance().getReference()
-//                .child("images/" + userImages.get(0) + ".jpg");
-//        Log.d("alo2", storageReference1.toString());
-//        storageReference1.getDownloadUrl().addOnSuccessListener(uri ->
-//                Glide.with(context)
-//                        .load(uri)
-//                        .into(imgProfile));
+        StorageReference storageReference1 = FirebaseStorage.getInstance().getReference()
+                .child("images/" + userImages.get(0) + ".jpg");
+        storageReference1.getDownloadUrl().addOnSuccessListener(uri ->
+                Glide.with(context)
+                        .load(uri)
+                        .into(imgProfile));
         name.setText(displayUs.getName());
-        Age.setText(String.valueOf(displayUs.getAge()));
+
+        if(displayUs.isGender()){
+            Age.setText(String.valueOf(displayUs.getAge()) + " Nam");
+        }
+        else {
+            Age.setText(String.valueOf(displayUs.getAge()) + " Nữ");
+        }
         container.addView(view);
         return  view;
     }

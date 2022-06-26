@@ -45,12 +45,13 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
     ViewPager viewPaper;
     ViewPagerAdapterSwipe adapter;
     DatabaseReference users;
+    DatabaseReference userCurrentRef;
     FragmentSwipeBinding binding;
     FloatingActionButton back, skip, like;
     User displayUser;
     String currentUserID;
     User currentUser;
-
+    List<String> unLikeUs = new ArrayList<>();
     public SwipeFragment() {
         // Required empty public constructor
     }
@@ -62,12 +63,16 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
         // Inflate the layout for this fragment
         rootLayout = inflater.inflate(R.layout.fragment_swipe, container, false);
         currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        users = FirebaseDatabase.getInstance().getReference("users").child(currentUserID);
-        users.addListenerForSingleValueEvent(new ValueEventListener() {
+        userCurrentRef = FirebaseDatabase.getInstance().getReference("users").child(currentUserID);
+        userCurrentRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 currentUser =  dataSnapshot.getValue(User.class);
                 currentUser.setUserId(dataSnapshot.getKey());
+                for (DataSnapshot e : dataSnapshot.child("connections")
+                        .child("unLike").getChildren()) {
+                    unLikeUs.add(e.getValue(String.class));
+                }
             }
 
             @Override
@@ -84,20 +89,18 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot userSnapshot:dataSnapshot.getChildren()){
-                    List<String> unLikeUs = (List<String>) userSnapshot.child("connections").child("matches").child("unLike").getValue();
 
                     User user1 =  userSnapshot.getValue(User.class);
                     user1.setUserId(userSnapshot.getKey());
-                    Log.d("gender", String.valueOf(user1.isGender()));
-                    if(unLikeUs != null){
-                        for(int i=0; i< unLikeUs.size(); i++){
-                            Log.d("gender", unLikeUs.get(i));
-                        }
-                    }
-                    if(user1.isGender() != currentUser.isGender() && ( unLikeUs != null || !unLikeUs.contains(currentUserID))){
+                    if(user1.isGender() != currentUser.isGender() && user1.getUserId() != currentUserID && ( unLikeUs == null || !unLikeUs.contains(user1.getUserId()))){
                         userList.add(user1);
                     }
 
+                }
+                if(unLikeUs != null){
+                    for(int i=0; i< unLikeUs.size(); i++){
+                        Log.d("unls", unLikeUs.get(i));
+                    }
                 }
                 if(userList.size() >0 ){
                     Random rand = new Random();
@@ -130,19 +133,31 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onSkip();
+                if(displayUser == null){
+                    Toast.makeText(getContext(), "Quẹt hết rồi!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    onSkip();
+                }
+
             }
         });
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onLike();
+                if(displayUser == null){
+                    Toast.makeText(getContext(), "Quẹt hết rồi!", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    onLike();
+                }
             }
         });
     }
     public void onSkip(){
         FirebaseDatabase.getInstance().getReference().child("users")
                 .child(this.currentUserID).child("connections").child("unLike").push().setValue(displayUser.getUserId());
+        unLikeUs.add(displayUser.getUserId());
         loadUser();
     }
     public void onLike(){
@@ -163,8 +178,8 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
                         for(DataSnapshot likeSnapshot:dataSnapshot.getChildren()){
                             if(likeSnapshot.getValue(String.class).equals(currentUserID)){
                                 UUID uuid = UUID.randomUUID();
-                                currentUS.child((String) likeSnapshot.getValue()).child("chat_id").setValue(uuid);
-                                userMatch.child((String) likeSnapshot.getValue()).child("chat_id").setValue(uuid);
+                                currentUS.child(displayUser.getUserId()).child("chat_id").setValue(uuid.toString());
+                                userMatch.child(currentUserID).child("chat_id").setValue(uuid.toString());
                                 break;
                             }
                         }
