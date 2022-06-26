@@ -49,6 +49,7 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
     FloatingActionButton back, skip, like;
     User displayUser;
     String currentUserID;
+    User currentUser;
 
     public SwipeFragment() {
         // Required empty public constructor
@@ -61,6 +62,19 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
         // Inflate the layout for this fragment
         rootLayout = inflater.inflate(R.layout.fragment_swipe, container, false);
         currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        users = FirebaseDatabase.getInstance().getReference("users").child(currentUserID);
+        users.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                currentUser =  dataSnapshot.getValue(User.class);
+                currentUser.setUserId(dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                iFireBaseLoadDone.onFirebaseLoadFailure(databaseError.getMessage());
+            }
+        });
         return rootLayout;
     }
 
@@ -70,9 +84,18 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot userSnapshot:dataSnapshot.getChildren()){
+                    List<String> unLikeUs = (List<String>) userSnapshot.child("connections").child("matches").child("unLike").getValue();
+
                     User user1 =  userSnapshot.getValue(User.class);
                     user1.setUserId(userSnapshot.getKey());
-                    userList.add(user1);
+                    Log.d("gender", String.valueOf(user1.isGender()));
+                    for(int i=0; i< unLikeUs.size(); i++){
+                        Log.d("gender", unLikeUs.get(i));
+                    }
+                    if(user1.isGender() != currentUser.isGender() && unLikeUs.contains(currentUserID)){
+                        userList.add(user1);
+                    }
+
                 }
                 Random rand = new Random();
                 int index = rand.nextInt(userList.size());
