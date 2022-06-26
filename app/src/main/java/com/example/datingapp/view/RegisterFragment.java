@@ -99,7 +99,7 @@ public class RegisterFragment extends Fragment {
                             } else {
                                 user = new User();
                                 user.setEmail(email);
-                                user.setFullname(fullname);
+                                user.setName(fullname);
                                 user.setPassword(password);
 
                                 Bundle bundle = new Bundle();

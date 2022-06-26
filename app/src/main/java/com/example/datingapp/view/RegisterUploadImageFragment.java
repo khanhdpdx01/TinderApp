@@ -95,9 +95,9 @@ public class RegisterUploadImageFragment extends Fragment {
                 saveUser(userId);
                 // upload anh len cloud storage
                 imageHasChoice.forEach((key, value) -> {
-                    String linkImage = userId + '/' + key.toString();
-                    uploadImage(getContext(), userId, key.toString(), value);
-                    profileImageNames.add(linkImage);
+                    String imageName = userId + "_" + key.toString();
+                    uploadImage(imageName, value, getContext());
+                    profileImageNames.add(imageName);
                 });
                 // cap nhat thong tin image cho user
                 updateImageForUser(userId, profileImageNames);
@@ -194,7 +194,7 @@ public class RegisterUploadImageFragment extends Fragment {
         users.put("gender", user.isGender());
         users.put("dateOfBirth", user.getDateOfBirth());
         users.put("hobbies", user.getHobbies());
-        users.put("fullname", user.getFullname());
+        users.put("name", user.getName());
 
         Log.d("DEBUG", ref.getRef().toString());
         ref.child(userId).setValue(users);
@@ -202,12 +202,12 @@ public class RegisterUploadImageFragment extends Fragment {
         return userId;
     }
 
-    private void uploadImage(Context context, String userId, String imageName, Bitmap bitmap) {
+    private void uploadImage(String imageName, Bitmap bitmap, Context context) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
 
-        StorageReference imagesRef = storageRef.child("images/" + userId);
-        StorageReference ref = storageRef.child(imageName + ".jpg");
+        StorageReference imagesRef = storageRef.child("images");
+        StorageReference ref = storageRef.child("images/" + imageName + ".jpg");
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
