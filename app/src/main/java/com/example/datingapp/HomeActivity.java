@@ -1,9 +1,15 @@
 package com.example.datingapp;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
@@ -19,6 +25,7 @@ import com.example.datingapp.view.SwipeFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeActivity extends AppCompatActivity  implements BottomNavigationView.OnNavigationItemSelectedListener {
     private Context context;
@@ -32,7 +39,17 @@ public class HomeActivity extends AppCompatActivity  implements BottomNavigation
         context = this;
 
         BottomNavigationView bnv = findViewById(R.id.bottom_navigation);
-        bnv.setVisibility(View.VISIBLE);
+
+//        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_container_home);
+//        NavController navController = navHostFragment.getNavController();
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_container_home);
+
+//        AppBarConfiguration appBarConfiguration =
+//                new AppBarConfiguration.Builder(navController.getGraph())
+//                        .build();
+
+//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+//        NavigationUI.setupWithNavController(bnv, navController);
 
 //        ArrayList<Fragment> fragList = new ArrayList<>();
 //        fragList.add(new AccountFragment());
@@ -47,6 +64,14 @@ public class HomeActivity extends AppCompatActivity  implements BottomNavigation
 
         bnv.setOnNavigationItemSelectedListener(this);
     }
+
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_container_home);
+//        NavController navController = navHostFragment.getNavController();
+//        return NavigationUI.onNavDestinationSelected(item, navController)
+//                || super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

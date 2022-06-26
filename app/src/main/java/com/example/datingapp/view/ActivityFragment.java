@@ -50,6 +50,9 @@ public class ActivityFragment extends Fragment implements View.OnClickListener, 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        if (getActivity().findViewById(R.id.bottom_navigation) != null) {
+            getActivity().findViewById(R.id.bottom_navigation).setVisibility(View.VISIBLE);
+        }
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_activity, container, false);
     }

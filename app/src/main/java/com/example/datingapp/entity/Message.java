@@ -21,7 +21,14 @@ public class Message implements Serializable {
         this.picture = picture;
     }
 
-//    @BindingAdapter({"android:picture"})
+    public Message(String id, String name, String content, String picture) {
+        this.id = id;
+        this.name = name;
+        this.content = content;
+        this.picture = picture;
+    }
+
+    //    @BindingAdapter({"android:picture"})
 //    public static void loadImage(CircleImageView view, String imageUrl) {
 //        Picasso.get().load(imageUrl)
 //                .placeholder(R.drawable.ic_baseline_image_24)

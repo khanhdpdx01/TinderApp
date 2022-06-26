@@ -67,9 +67,17 @@ public class ChatPrivateFragment extends Fragment {
         }
 
         if (getActivity().findViewById(R.id.bottom_navigation) != null) {
-            getActivity().findViewById(R.id.bottom_navigation).setVisibility(View.GONE);
+            getActivity().findViewById(R.id.bottom_navigation).setVisibility(View.INVISIBLE);
         }
     }
+
+//    @Override
+//    public void onDestroyView() {
+//        if (getActivity().findViewById(R.id.bottom_navigation) != null) {
+//            getActivity().findViewById(R.id.bottom_navigation).setVisibility(View.VISIBLE);
+//        }
+//        super.onDestroyView();
+//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -135,6 +143,7 @@ public class ChatPrivateFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
                 if (TextUtils.isEmpty(binding.edMessage.getText().toString().trim())) {
                     binding.btnSend.setImageDrawable(
                             getResources().getDrawable(R.drawable.ic_baseline_keyboard_voice_24,
@@ -150,6 +159,9 @@ public class ChatPrivateFragment extends Fragment {
                     binding.btnCamera.setVisibility(View.GONE);
                     binding.btnEmoticon.setVisibility(View.GONE);
                 }
+
+                // scroll smooth to message end
+                binding.recyclerViewMessages.smoothScrollToPosition(chatAdapter.getItemCount() - 2);
             }
 
             @Override
@@ -159,6 +171,8 @@ public class ChatPrivateFragment extends Fragment {
         });
 
         initBtnClick();
+        // scroll smooth to message end
+        binding.recyclerViewMessages.smoothScrollToPosition(chatAdapter.getItemCount() - 2);
     }
 
     private void initBtnClick(){

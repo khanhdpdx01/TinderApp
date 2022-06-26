@@ -19,6 +19,7 @@ import com.example.datingapp.R;
 import com.example.datingapp.adapters.LikesAdapter;
 import com.example.datingapp.adapters.MessagesAdapter;
 import com.example.datingapp.databinding.FragmentChatBinding;
+import com.example.datingapp.entity.Chat;
 import com.example.datingapp.entity.Like;
 import com.example.datingapp.entity.Message;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,6 +27,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -94,11 +96,14 @@ public class ChatFragment extends Fragment {
     }
 
     // retrieve data user through key
-    private void fetchMatchInformation(String key) {
+    private void fetchMatchInformation(DataSnapshot snapshot) {
         DatabaseReference userDb = FirebaseDatabase.getInstance()
                 .getReference().child("users");
 
-        userDb.child(key.trim()).addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference chatDb = FirebaseDatabase.getInstance()
+                .getReference().child("chats");
+
+        userDb.child(snapshot.getKey().trim()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
             if (dataSnapshot.exists()) {
@@ -116,12 +121,37 @@ public class ChatFragment extends Fragment {
                     picture = snapshot.getValue(String.class);
                 }
 
-                Log.d("mga.fetchUser", name);
-
                 Like like = new Like(id, name, picture);
                 likeList.add(like);
                 contactsAdapter.setLikeList(likeList);
                 contactsAdapter.notifyDataSetChanged();
+
+                // fetch message last with user matched
+                Query lastQuery = chatDb.child(snapshot.child("chat_id").getValue(String.class))
+                        .orderByKey().limitToLast(1);
+                String finalName = name;
+                String finalPicture = picture;
+                lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            for (DataSnapshot data: dataSnapshot.getChildren()) {
+                                Chat chatLast = data.getValue(Chat.class);
+                                Message msgLast = new Message(id, finalName, chatLast.getMessage(),
+                                        finalPicture);
+                                messageList.add(msgLast);
+                                messagesAdapter.setMessageList(messageList);
+                                messagesAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
             }
 
             }
@@ -142,7 +172,7 @@ public class ChatFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()){
                     for(DataSnapshot match : dataSnapshot.getChildren()){
-                        fetchMatchInformation(match.getKey());
+                        fetchMatchInformation(match);
                     }
                 }
             }
@@ -153,4 +183,5 @@ public class ChatFragment extends Fragment {
             }
         });
     }
+
 }
