@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +22,7 @@ public class RegisterGenderFragment extends Fragment {
     private User user;
     private FragmentRegisterGenderBinding binding;
     private Button btnMale, btnFemale;
+    private boolean isChoice = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,18 +52,24 @@ public class RegisterGenderFragment extends Fragment {
             btnMale.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#40ffdc")));
             btnFemale.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#ffffff")));
             user.setGender(true);
+            isChoice = true;
         });
 
         btnFemale.setOnClickListener(view1 -> {
             btnFemale.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#40ffdc")));
             btnMale.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#ffffff")));
             user.setGender(false);
+            isChoice = true;
         });
 
         binding.btnNext.setOnClickListener(view1 -> {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("user", user);
-            Navigation.findNavController(view1).navigate(R.id.action_registerGenderFragment_to_registerHobbyFragment, bundle);
+            if (!isChoice) {
+                Toast.makeText(getContext(), "Vui lòng chọn giới tính !!!", Toast.LENGTH_SHORT).show();
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("user", user);
+                Navigation.findNavController(view1).navigate(R.id.action_registerGenderFragment_to_registerHobbyFragment, bundle);
+            }
         });
 
     }

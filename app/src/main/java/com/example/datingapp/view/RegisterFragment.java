@@ -1,7 +1,9 @@
 package com.example.datingapp.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +17,14 @@ import androidx.navigation.Navigation;
 import com.example.datingapp.R;
 import com.example.datingapp.databinding.FragmentRegisterBinding;
 import com.example.datingapp.entity.User;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.SignInMethodQueryResult;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RegisterFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class RegisterFragment extends Fragment {
+    private final FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+    private final Context context = getContext();
     private FragmentRegisterBinding binding;
     private User user;
 
@@ -48,8 +51,12 @@ public class RegisterFragment extends Fragment {
 
         binding.btnNext.setOnClickListener(view1 -> {
             String email = binding.email.getText().toString();
+            String fullname = binding.fullname.getText().toString();
             String password = binding.password.getText().toString();
             String confirmPassword = binding.confirmPassword.getText().toString();
+            if (mFirebaseAuth.getCurrentUser() != null) {
+                mFirebaseAuth.signOut();
+            }
 
             if (TextUtils.isEmpty(email)) {
                 Toast.makeText(getContext(), "Vui lòng nhập email!", Toast.LENGTH_SHORT).show();
@@ -61,7 +68,12 @@ public class RegisterFragment extends Fragment {
                 return;
             }
 
-            if(!isEmail(email)) {
+            if (TextUtils.isEmpty(fullname)) {
+                Toast.makeText(getContext(), "Vui lòng nhập họ và tên!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (!isEmail(email)) {
                 Toast.makeText(getContext(), "Email không đúng định dạng!", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -76,13 +88,26 @@ public class RegisterFragment extends Fragment {
                 return;
             }
 
-            user = new User();
-            user.setEmail(email);
-            user.setPassword(password);
+            mFirebaseAuth.fetchSignInMethodsForEmail(email)
+                    .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
+                            boolean isExists = task.getResult().getSignInMethods().isEmpty();
+                            if (!isExists) {
+                                Toast.makeText(getContext(), "Email đã tồn tại!", Toast.LENGTH_SHORT).show();
+                                Log.d("DEBUG", "Da ton tai");
+                            } else {
+                                user = new User();
+                                user.setEmail(email);
+                                user.setFullname(fullname);
+                                user.setPassword(password);
 
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("user", user);
-            Navigation.findNavController(view1).navigate(R.id.action_registerFragment_to_registerAgeFragment, bundle);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("user", user);
+                                Navigation.findNavController(view1).navigate(R.id.action_registerFragment_to_registerAgeFragment, bundle);
+                            }
+                        }
+                    });
         });
     }
 
@@ -90,4 +115,5 @@ public class RegisterFragment extends Fragment {
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
         return email.matches(regex);
     }
+
 }

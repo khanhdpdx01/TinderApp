@@ -2,10 +2,10 @@ package com.example.datingapp.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class User implements Serializable {
     private String email;
+    private String fullname;
     private String password;
     private boolean gender;
     private String dateOfBirth;
@@ -15,7 +15,8 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(boolean gender, String dateOfBirth, ArrayList<String> hobbies) {
+    public User(String fullname, boolean gender, String dateOfBirth, ArrayList<String> hobbies) {
+        this.fullname = fullname;
         this.gender = gender;
         this.dateOfBirth = dateOfBirth;
         this.hobbies = hobbies;
@@ -27,6 +28,14 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public String getPassword() {
