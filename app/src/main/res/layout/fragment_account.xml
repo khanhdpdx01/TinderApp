@@ -6,7 +6,7 @@
     tools:context=".view.FeedFragment$AccountFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -14,7 +14,8 @@
         <ImageView
             android:id="@+id/iv_profile"
             android:layout_width="match_parent"
-            android:layout_height="800px"></ImageView>
+            android:layout_height="800px"
+            android:scaleType="fitXY"></ImageView>
 
         <TextView
             android:id="@+id/profile_name"
@@ -25,6 +26,66 @@
             android:text=""
             android:textSize="25sp"
             android:textStyle="bold" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/light_grey"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="Age:"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/age"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text=""
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/light_grey"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="Gender:"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/gender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text=""
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/light_grey"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:text="Interests:"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/interests_beforematch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text=""
+            android:textSize="16sp" />
+    </LinearLayout>
 
 </FrameLayout>

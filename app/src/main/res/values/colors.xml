@@ -16,6 +16,7 @@
     <color name="light_gray">#ABABAB</color>
     <color name="whiteGray">#F6F7FB</color>
     <color name="transparent">#00000000 </color>
+    <color name="light_grey">#eeeeee</color>
 
     <!--grey-->
     <color name="md_grey_50">#FAFAFA</color>

@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.example.datingapp.R;
 import com.example.datingapp.databinding.FragmentAccountBinding;
+import com.example.datingapp.entity.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,6 +22,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.util.stream.Collectors;
 
 public class AccountFragment extends Fragment {
     private final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -48,21 +51,29 @@ public class AccountFragment extends Fragment {
         binding = FragmentAccountBinding.bind(view);
 
         Query query = FirebaseDatabase.getInstance()
-                .getReference().child("users").child(userId).child("profileImages").limitToFirst(1);
+                .getReference().child("users").child(userId);
+
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    String id = dataSnapshot.getValue(String.class);
-                    Log.d("DEBUG", id);
+                    User user = dataSnapshot.getValue(User.class);
+                    Log.d("DEBUG", user.getName());
+
+                    String imageLink = user.getProfileImages().get(0);
 
                     StorageReference storageReference = FirebaseStorage.getInstance().getReference()
-                            .child("images/" + id + ".jpg");
+                            .child("images/" + imageLink + ".jpg");
 
                     storageReference.getDownloadUrl().addOnSuccessListener(uri ->
-                            Glide.with(context)
+                            Glide.with(getContext())
                                     .load(uri)
-                                    .into(images));
+                                    .into(binding.ivProfile));
+
+                    binding.profileName.setText(user.getName());
+                    binding.age.setText("" + user.getAge());
+                    binding.gender.setText((user.isGender() ? "Nam" : "Nữ"));
+                    binding.interestsBeforematch.setText(user.getHobbies().stream().collect(Collectors.joining()));
                 }
             }
 

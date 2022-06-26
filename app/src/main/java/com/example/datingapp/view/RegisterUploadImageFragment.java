@@ -133,25 +133,27 @@ public class RegisterUploadImageFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Bitmap bitmap = null;
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            bitmap = (Bitmap) data.getExtras().get("data");
+        if (data != null) {
+            Bitmap bitmap = null;
+            if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+                bitmap = (Bitmap) data.getExtras().get("data");
 
-        } else {
-            Uri selectedImage = data.getData();
-            ImageView image = new ImageView(getContext());
-            image.setImageURI(selectedImage);
+            } else {
+                Uri selectedImage = data.getData();
+                ImageView image = new ImageView(getContext());
+                image.setImageURI(selectedImage);
 
-            bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+                bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+            }
+            // scale image ma khong lam hay doi ti le anh
+            Bitmap bMapScaled = BitmapScaler.scaleToFitWidth(bitmap, imageView.getWidth());
+            bMapScaled = BitmapScaler.scaleToFitHeight(bMapScaled, imageView.getHeight());
+
+            imageView.setImageBitmap(bMapScaled);
+
+            numberOfImageHasChoice++;
+            imageHasChoice.put(currentImageChoice, bMapScaled);
         }
-        // scale image ma khong lam hay doi ti le anh
-        Bitmap bMapScaled = BitmapScaler.scaleToFitWidth(bitmap, imageView.getWidth());
-        bMapScaled = BitmapScaler.scaleToFitHeight(bMapScaled, imageView.getHeight());
-
-        imageView.setImageBitmap(bMapScaled);
-
-        numberOfImageHasChoice++;
-        imageHasChoice.put(currentImageChoice, bMapScaled);
     }
 
     private String registerAccountWithEmail(String email, String password, View view) {
