@@ -15,6 +15,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.datingapp.R;
@@ -25,6 +26,7 @@ import com.example.datingapp.entity.User;
 import com.example.datingapp.utils.DepthPageTransformer;
 import com.example.datingapp.utils.IFireBaseLoadDone;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,7 +34,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
     private View rootLayout;
@@ -40,6 +46,9 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
     ViewPagerAdapterSwipe adapter;
     DatabaseReference users;
     FragmentSwipeBinding binding;
+    FloatingActionButton back, skip, like;
+    User displayUser;
+    String currentUserID;
 
     public SwipeFragment() {
         // Required empty public constructor
@@ -51,7 +60,7 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         rootLayout = inflater.inflate(R.layout.fragment_swipe, container, false);
-
+        currentUserID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         return rootLayout;
     }
 
@@ -61,14 +70,14 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot userSnapshot:dataSnapshot.getChildren()){
-                    userList.add(userSnapshot.getValue(User.class));
-                    userList.forEach(
-                            user-> {
-                                Log.d("User1", user.getProfileImages().get(0));
-                            }
-                    );
+                    User user1 =  userSnapshot.getValue(User.class);
+                    user1.setUserId(userSnapshot.getKey());
+                    userList.add(user1);
                 }
-                iFireBaseLoadDone.onFirebaseLoadSuccess(userList.get(0).getProfileImages());
+                Random rand = new Random();
+                int index = rand.nextInt(userList.size());
+                iFireBaseLoadDone.onFirebaseLoadSuccess(userList.get(index));
+                displayUser = userList.get(index);
             }
 
             @Override
@@ -88,10 +97,57 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
         loadUser();
         viewPaper = binding.viewPagerMain;
         viewPaper.setPageTransformer(true,new DepthPageTransformer());
+        skip = binding.fabSkip;
+        like = binding.fabLike;
+        skip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onSkip();
+            }
+        });
+        like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onLike();
+            }
+        });
+    }
+    public void onSkip(){
+        FirebaseDatabase.getInstance().getReference().child("users")
+                .child(this.currentUserID).child("connections").child("unLike").push().setValue(displayUser.getUserId());
+        loadUser();
+    }
+    public void onLike(){
+        FirebaseDatabase.getInstance().getReference().child("users")
+                .child(this.currentUserID).child("connections").child("like").push().setValue(displayUser.getUserId());
+        DatabaseReference checkStatus = FirebaseDatabase.getInstance().getReference().child("users")
+                .child(displayUser.getUserId()).child("connections").child("like");
+        DatabaseReference currentUS = FirebaseDatabase.getInstance().getReference().child("users")
+                .child(this.currentUserID).child("connections").child("matches");
+        DatabaseReference userMatch = FirebaseDatabase.getInstance().getReference().child("users")
+                .child(displayUser.getUserId()).child("connections").child("matches");
 
+        checkStatus.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        //Get map of users in datasnapshot
+                        for(DataSnapshot likeSnapshot:dataSnapshot.getChildren()){
+                            if(likeSnapshot.getValue(String.class).equals(currentUserID)){
+                                UUID uuid = UUID.randomUUID();
+                                currentUS.child((String) likeSnapshot.getValue()).child("chat_id").setValue(uuid);
+                                userMatch.child((String) likeSnapshot.getValue()).child("chat_id").setValue(uuid);
+                                break;
+                            }
+                        }
+                    }
 
-        int bottomMargin = Utils.dpToPx(100);
-        Point windowSize = Utils.getDisplaySize(getActivity().getWindowManager());
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        //handle databaseError
+                    }
+                });
+        loadUser();
     }
 
 
@@ -100,8 +156,8 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
     }
 
     @Override
-    public void onFirebaseLoadSuccess(List<String> userImages) {
-        adapter = new ViewPagerAdapterSwipe(this.getContext(), userImages);
+    public void onFirebaseLoadSuccess(User user) {
+        adapter = new ViewPagerAdapterSwipe(this.getContext(), user);
         viewPaper.setAdapter(adapter);
     }
     @Override
