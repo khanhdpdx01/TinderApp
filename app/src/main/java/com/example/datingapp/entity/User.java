@@ -3,10 +3,9 @@ package com.example.datingapp.entity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 
 public class User implements Serializable {
-    private  String userId;
+    private String userId;
     private String email;
     private String name;
     private String password;
@@ -31,6 +30,7 @@ public class User implements Serializable {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
     public String getEmail() {
         return email;
     }
@@ -38,6 +38,7 @@ public class User implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
+
     public String getName() {
         return name;
     }
@@ -77,6 +78,7 @@ public class User implements Serializable {
     public void setHobbies(ArrayList<String> hobbies) {
         this.hobbies = hobbies;
     }
+
     public ArrayList<String> getProfileImages() {
         return profileImages;
     }
@@ -84,6 +86,7 @@ public class User implements Serializable {
     public void setProfileImages(ArrayList<String> profileImages) {
         this.profileImages = profileImages;
     }
+
     public int getAge() {
         Calendar dateOfBirth = Calendar.getInstance();
         Calendar today = Calendar.getInstance();
