@@ -89,18 +89,23 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
                     User user1 =  userSnapshot.getValue(User.class);
                     user1.setUserId(userSnapshot.getKey());
                     Log.d("gender", String.valueOf(user1.isGender()));
-                    for(int i=0; i< unLikeUs.size(); i++){
-                        Log.d("gender", unLikeUs.get(i));
+                    if(unLikeUs != null){
+                        for(int i=0; i< unLikeUs.size(); i++){
+                            Log.d("gender", unLikeUs.get(i));
+                        }
                     }
-                    if(user1.isGender() != currentUser.isGender() && unLikeUs.contains(currentUserID)){
+                    if(user1.isGender() != currentUser.isGender() && ( unLikeUs != null || !unLikeUs.contains(currentUserID))){
                         userList.add(user1);
                     }
 
                 }
-                Random rand = new Random();
-                int index = rand.nextInt(userList.size());
-                iFireBaseLoadDone.onFirebaseLoadSuccess(userList.get(index));
-                displayUser = userList.get(index);
+                if(userList.size() >0 ){
+                    Random rand = new Random();
+                    int index = rand.nextInt(userList.size());
+                    iFireBaseLoadDone.onFirebaseLoadSuccess(userList.get(index));
+                    displayUser = userList.get(index);
+                }
+
             }
 
             @Override
