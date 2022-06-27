@@ -39,6 +39,7 @@ public class HomeActivity extends AppCompatActivity  implements BottomNavigation
         context = this;
 
         BottomNavigationView bnv = findViewById(R.id.bottom_navigation);
+        bnv.setSelectedItemId(R.id.fire);
 
 //        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_container_home);
 //        NavController navController = navHostFragment.getNavController();
@@ -65,14 +66,6 @@ public class HomeActivity extends AppCompatActivity  implements BottomNavigation
         bnv.setOnNavigationItemSelectedListener(this);
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_container_home);
-//        NavController navController = navHostFragment.getNavController();
-//        return NavigationUI.onNavDestinationSelected(item, navController)
-//                || super.onOptionsItemSelected(item);
-//    }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
@@ -86,7 +79,7 @@ public class HomeActivity extends AppCompatActivity  implements BottomNavigation
                 break;
             case R.id.chat:
 //                viewPager.setCurrentItem(2);
-                loadFragment(new ChatFragment());
+                loadFragment(new ActivityFragment());
                 break;
         }
 

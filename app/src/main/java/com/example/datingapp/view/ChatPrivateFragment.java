@@ -67,7 +67,7 @@ public class ChatPrivateFragment extends Fragment {
         }
 
         if (getActivity().findViewById(R.id.bottom_navigation) != null) {
-            getActivity().findViewById(R.id.bottom_navigation).setVisibility(View.INVISIBLE);
+            getActivity().findViewById(R.id.bottom_navigation).setVisibility(View.GONE);
         }
     }
 

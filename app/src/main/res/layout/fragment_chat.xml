@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".view.ChatFragment">
 
-    <com.example.datingapp.widgets.BounceScrollView
-        android:id="@+id/scrollview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+<!--    <com.example.datingapp.widgets.BounceScrollView-->
+<!--        android:id="@+id/scrollview"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        >-->
         
         <LinearLayout
             android:id="@+id/main_layout"
@@ -103,6 +103,6 @@
                 android:background="#ffffff" />
         </LinearLayout>
 
-    </com.example.datingapp.widgets.BounceScrollView>
+<!--    </com.example.datingapp.widgets.BounceScrollView>-->
 
 </FrameLayout>

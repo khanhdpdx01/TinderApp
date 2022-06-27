@@ -33,20 +33,31 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
     private Context context;
     private List<Message> messageList;
 
-    public MessagesAdapter() {
+    // Create a final private AdapterOnClickHandler called mClickHandler
+    private final AdapterOnClickHandler mClickHandler;
+
+    public MessagesAdapter(AdapterOnClickHandler mClickHandler) {
+        this.mClickHandler = mClickHandler;
     }
 
-    public MessagesAdapter(Context context, List<Message> messageList) {
+    public MessagesAdapter(Context context, List<Message> messageList, AdapterOnClickHandler mClickHandler) {
         this.context = context;
         this.messageList = messageList;
+        this.mClickHandler = mClickHandler;
+    }
+
+    // Add an interface called AdapterOnClickHandler
+    // Within that interface, define a void method that handles the onClick event
+    public interface AdapterOnClickHandler {
+        void onClick(Message data);
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.message_item,
-                parent, false);
-        return new ViewHolder(itemView);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.message_item, parent, false);
+        return new MessagesAdapter.ViewHolder(view);
     }
 
     @Override
@@ -58,6 +69,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
         if(item.getCount() <= 0){
             holder.viewIndicator.setVisibility(View.INVISIBLE);
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("DEBUG", "come in click in onBindViewHolder");
+            }
+        });
 
         StorageReference storageReference  = FirebaseStorage.getInstance().getReference()
                 .child("images/" + item.getPicture() + ".jpg");
@@ -80,7 +98,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView name, content, count;
         public ImageView thumbnail;
         public RelativeLayout viewIndicator;
@@ -95,36 +113,18 @@ public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.ViewHo
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // https://vncoder.vn/bai-viet/bo-sung-tinh-nang-item-click-cho-recyclerview-trong-android
-                    DatabaseReference matchesDb = FirebaseDatabase.getInstance().getReference()
-                            .child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                            .child("connections").child("matches");
-                    Log.d("DEBUG", String.valueOf(matchesDb.getRef()));
-
-                    Message msg = messageList.get(getAdapterPosition());
-
-                    matchesDb.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                for (DataSnapshot match: dataSnapshot.getChildren()) {
-                                    String userId = match.getKey();
-                                    Like like = new Like(userId, msg.getName(), msg.getPicture());
-                                    ((FragmentActivity)context).getSupportFragmentManager().beginTransaction()
-                                            .replace(R.id.nav_host_fragment_container_home, new ChatPrivateFragment(like))
-                                            .addToBackStack(null)
-                                            .commit();
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
+                    Log.d("DEBUG", "come in to message onclick");
                 }
             });
+
+            // Call setOnClickListener on the view passed into the constructor
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            Log.d("DEBUG", "click oke");
+            mClickHandler.onClick(messageList.get(getAdapterPosition()));
         }
     }
 }

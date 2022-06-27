@@ -5,10 +5,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,10 +32,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 
-public class ChatFragment extends Fragment {
+public class ChatFragment extends Fragment implements MessagesAdapter.AdapterOnClickHandler {
 
     private FragmentChatBinding binding;
     private MessagesAdapter messagesAdapter;
@@ -74,14 +72,13 @@ public class ChatFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         binding = FragmentChatBinding.bind(view);
 
-
         messageList = new ArrayList<>();
-        messagesAdapter = new MessagesAdapter(getContext(), messageList);
+        messagesAdapter = new MessagesAdapter(getContext(), messageList, this);
 
         likeList = new ArrayList<>();
         contactsAdapter = new LikesAdapter(getContext(), likeList);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         binding.recyclerViewMessages.setLayoutManager(layoutManager);
         binding.recyclerViewMessages.setItemAnimator(new DefaultItemAnimator());
         binding.recyclerViewMessages.setAdapter(messagesAdapter);
@@ -184,4 +181,32 @@ public class ChatFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onClick(Message msg) {
+        DatabaseReference matchesDb = FirebaseDatabase.getInstance().getReference()
+                .child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("connections").child("matches");
+        Log.d("DEBUG", String.valueOf(matchesDb.getRef()));
+
+        matchesDb.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot match: dataSnapshot.getChildren()) {
+                        String userId = match.getKey();
+                        Like like = new Like(userId, msg.getName(), msg.getPicture());
+                        ((FragmentActivity)getContext()).getSupportFragmentManager().beginTransaction()
+                                .replace(R.id.nav_host_fragment_container_home, new ChatPrivateFragment(like))
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 }
