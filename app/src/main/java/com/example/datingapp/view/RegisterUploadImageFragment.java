@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -38,13 +40,13 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class RegisterUploadImageFragment extends Fragment {
     private final int NUMBER_OF_IMAGE = 6;
     private final ImageView[] imagesViews = new ImageView[NUMBER_OF_IMAGE];
     private final FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
     private final Map<Integer, Bitmap> imageHasChoice = new HashMap<>();
+    private FirebaseUser firebaseUser = null;
     private ImageView imageView;
     private User user;
     private int numberOfImageHasChoice = 0, currentImageChoice = 0;
@@ -87,9 +89,10 @@ public class RegisterUploadImageFragment extends Fragment {
             } else {
                 ArrayList<String> profileImageNames = new ArrayList<>();
 
-                registerAccountWithEmail(user.getEmail(), user.getPassword(), view1);
+                String userId = registerAccountWithEmail(user.getEmail(), user.getPassword(), view1);
+//                Toast.makeText(getContext(), userId, Toast.LENGTH_SHORT).show();
                 // luu thong tin user vao realtime database
-                String userId = saveUser();
+                saveUser(userId);
                 // upload anh len cloud storage
                 imageHasChoice.forEach((key, value) -> {
                     String imageName = userId + "_" + key.toString();
@@ -98,6 +101,7 @@ public class RegisterUploadImageFragment extends Fragment {
                 });
                 // cap nhat thong tin image cho user
                 updateImageForUser(userId, profileImageNames);
+                Navigation.findNavController(view).navigate(R.id.loginFragment);
             }
         });
 
@@ -129,53 +133,73 @@ public class RegisterUploadImageFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Bitmap bitmap = null;
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            bitmap = (Bitmap) data.getExtras().get("data");
+        if (data != null) {
+            Bitmap bitmap = null;
+            if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+                bitmap = (Bitmap) data.getExtras().get("data");
 
-        } else {
-            Uri selectedImage = data.getData();
-            ImageView image = new ImageView(getContext());
-            image.setImageURI(selectedImage);
+            } else {
+                Uri selectedImage = data.getData();
+                ImageView image = new ImageView(getContext());
+                image.setImageURI(selectedImage);
 
-            bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+                bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+            }
+            // scale image ma khong lam hay doi ti le anh
+            Bitmap bMapScaled = BitmapScaler.scaleToFitWidth(bitmap, imageView.getWidth());
+            bMapScaled = BitmapScaler.scaleToFitHeight(bMapScaled, imageView.getHeight());
+
+            imageView.setImageBitmap(bMapScaled);
+
+            numberOfImageHasChoice++;
+            imageHasChoice.put(currentImageChoice, bMapScaled);
         }
-        // scale image ma khong lam hay doi ti le anh
-        Bitmap bMapScaled = BitmapScaler.scaleToFitWidth(bitmap, imageView.getWidth());
-        bMapScaled = BitmapScaler.scaleToFitHeight(bMapScaled, imageView.getHeight());
-
-        imageView.setImageBitmap(bMapScaled);
-
-        numberOfImageHasChoice++;
-        imageHasChoice.put(currentImageChoice, bMapScaled);
     }
 
-    private void registerAccountWithEmail(String email, String password, View view) {
+    private String registerAccountWithEmail(String email, String password, View view) {
         mFirebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
-                        Toast.makeText(getContext(), "Thành công", Toast.LENGTH_SHORT).show();
-                        Navigation.findNavController(view).navigate(R.id.loginFragment);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        FirebaseUser user = mFirebaseAuth.getCurrentUser();
+                        Log.d("DEBUG", user.toString());
                     }
                 });
+
+        firebaseUser = mFirebaseAuth.getCurrentUser();
+        while (firebaseUser == null) {
+            firebaseUser = mFirebaseAuth.getCurrentUser();
+        }
+//        mFirebaseAuth.signInWithEmailAndPassword(email, password)
+//                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if (task.isSuccessful()) {
+//                            // Sign in success, update UI with the signed-in user's information
+//                            Log.d("DEBUG", "signInWithEmail:success");
+//                            FirebaseUser user = mFirebaseAuth.getCurrentUser();
+//                        } else {
+//                            // If sign in fails, display a message to the user.
+//                            Log.d("DEBUG", "FAILD");
+//                        }
+//                    }
+//                });
+        return firebaseUser.getUid();
     }
 
-    private String saveUser() {
+    private String saveUser(String userId) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("users");
 
-        String userId = UUID.randomUUID().toString();
-        Map<String, User> users = new HashMap<>();
-        users.put(userId, new User(user.isGender(), user.getDateOfBirth(), user.getHobbies()));
+//        String userId = UUID.randomUUID().toString();
+        Map<String, Object> users = new HashMap<>();
+        users.put("gender", user.isGender());
+        users.put("dateOfBirth", user.getDateOfBirth());
+        users.put("hobbies", user.getHobbies());
+        users.put("name", user.getName());
 
-        ref.setValue(users);
+        Log.d("DEBUG", ref.getRef().toString());
+        ref.child(userId).setValue(users);
 
         return userId;
     }
