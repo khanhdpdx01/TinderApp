@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -7,4 +8,29 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primaryColor">#FD267A</color>
+    <color name="backgroungColor">#f5f5f5</color>
+    <color name="colorPrimary">#7579FF</color>
+    <color name="colorPrimaryDark">#7579FF</color>
+    <color name="colorAccent">#B224EF</color>
+    <color name="light_gray">#ABABAB</color>
+    <color name="whiteGray">#F6F7FB</color>
+    <color name="transparent">#00000000 </color>
+    <color name="light_grey">#eeeeee</color>
+
+    <!--grey-->
+    <color name="md_grey_50">#FAFAFA</color>
+    <color name="md_grey_100">#F5F5F5</color>
+    <color name="md_grey_200">#EEEEEE</color>
+    <color name="md_grey_300">#E0E0E0</color>
+    <color name="md_grey_400">#BDBDBD</color>
+    <color name="md_grey_500">#9E9E9E</color>
+    <color name="md_grey_600">#757575</color>
+    <color name="md_grey_700">#616161</color>
+    <color name="md_grey_800">#424242</color>
+    <color name="md_grey_900">#212121</color>
+    <color name="md_black_1000">#000000</color>
+    <color name="md_white_1000">#ffffff</color>
+    <color name="md_blue_A700">#2962FF</color>
+    <color name="darkGray">#333333</color>
 </resources>

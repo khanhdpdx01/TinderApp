@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "548717688755",
+    "firebase_url": "https://tinderapp-c47a6-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "tinderapp-c47a6",
+    "storage_bucket": "tinderapp-c47a6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:548717688755:android:1c460216a2630dc65ebdc6",
+        "android_client_info": {
+          "package_name": "com.example.datingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "548717688755-oid95lphv08dhi2u69b1osmcq259al1n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.datingapp",
+            "certificate_hash": "96d7adf8d883bcb75f4c7cb25912dbcc25f557c5"
+          }
+        },
+        {
+          "client_id": "548717688755-m3felhshg6ds08e39oubmh52gopmabet.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5Pb_MmnSmpe_aYzIXQhPjA8ckOwHfk44"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "548717688755-m3felhshg6ds08e39oubmh52gopmabet.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
