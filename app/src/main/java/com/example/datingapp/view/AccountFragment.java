@@ -1,5 +1,6 @@
 package com.example.datingapp.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.example.datingapp.MainActivity;
 import com.example.datingapp.R;
 import com.example.datingapp.databinding.FragmentAccountBinding;
 import com.example.datingapp.entity.User;
@@ -26,7 +28,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.stream.Collectors;
 
 public class AccountFragment extends Fragment {
-    private final String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private FragmentAccountBinding binding;
 
     @Override
@@ -50,8 +52,17 @@ public class AccountFragment extends Fragment {
 
         binding = FragmentAccountBinding.bind(view);
 
+        binding.btnLogout.setOnClickListener(view1 -> {
+            if (firebaseAuth.getCurrentUser() != null) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
+
         Query query = FirebaseDatabase.getInstance()
-                .getReference().child("users").child(userId);
+                .getReference().child("users").child(firebaseAuth.getUid());
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
