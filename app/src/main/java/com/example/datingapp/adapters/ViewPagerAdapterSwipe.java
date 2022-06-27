@@ -57,8 +57,6 @@ public class ViewPagerAdapterSwipe extends PagerAdapter {
         ImageView imgProfile = (ImageView) view.findViewById(R.id.img_profileswipe);
         TextView name = (TextView) view.findViewById(R.id.name);
         TextView Age = (TextView) view.findViewById(R.id.age);
-        Log.d("Userima", userImages.get(position));
-        Log.d("alo", images.toString());
         StorageReference storageReference  = FirebaseStorage.getInstance().getReference()
                 .child("images/" + userImages.get(position) + ".jpg");
         Log.d("alo1", storageReference.toString());

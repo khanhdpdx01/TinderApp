@@ -52,6 +52,8 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
     String currentUserID;
     User currentUser;
     List<String> unLikeUs = new ArrayList<>();
+    List<String> likeList = new ArrayList<>();
+
     public SwipeFragment() {
         // Required empty public constructor
     }
@@ -73,6 +75,11 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
                         .child("unLike").getChildren()) {
                     unLikeUs.add(e.getValue(String.class));
                 }
+                for (DataSnapshot e : dataSnapshot.child("connections")
+                        .child("like").getChildren()) {
+                    likeList.add(e.getValue(String.class));
+                }
+
             }
 
             @Override
@@ -92,15 +99,12 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
 
                     User user1 =  userSnapshot.getValue(User.class);
                     user1.setUserId(userSnapshot.getKey());
-                    if(user1.isGender() != currentUser.isGender() && user1.getUserId() != currentUserID && ( unLikeUs == null || !unLikeUs.contains(user1.getUserId()))){
+                    if(user1.isGender() != currentUser.isGender() && user1.getUserId() != currentUserID
+                            && ( unLikeUs == null || !unLikeUs.contains(user1.getUserId()))
+                            && (likeList == null || !likeList.contains(user1.getUserId()))){
                         userList.add(user1);
                     }
 
-                }
-                if(unLikeUs != null){
-                    for(int i=0; i< unLikeUs.size(); i++){
-                        Log.d("unls", unLikeUs.get(i));
-                    }
                 }
                 if(userList.size() >0 ){
                     Random rand = new Random();
@@ -161,36 +165,37 @@ public class SwipeFragment extends Fragment implements IFireBaseLoadDone {
         loadUser();
     }
     public void onLike(){
-        FirebaseDatabase.getInstance().getReference().child("users")
-                .child(this.currentUserID).child("connections").child("like").push().setValue(displayUser.getUserId());
-        DatabaseReference checkStatus = FirebaseDatabase.getInstance().getReference().child("users")
-                .child(displayUser.getUserId()).child("connections").child("like");
-        DatabaseReference currentUS = FirebaseDatabase.getInstance().getReference().child("users")
-                .child(this.currentUserID).child("connections").child("matches");
-        DatabaseReference userMatch = FirebaseDatabase.getInstance().getReference().child("users")
-                .child(displayUser.getUserId()).child("connections").child("matches");
+        likeList.add(displayUser.getUserId());
+            FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(this.currentUserID).child("connections").child("like").push().setValue(displayUser.getUserId());
+            DatabaseReference checkStatus = FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(displayUser.getUserId()).child("connections").child("like");
+            DatabaseReference currentUS = FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(this.currentUserID).child("connections").child("matches");
+            DatabaseReference userMatch = FirebaseDatabase.getInstance().getReference().child("users")
+                    .child(displayUser.getUserId()).child("connections").child("matches");
 
-        checkStatus.addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        //Get map of users in datasnapshot
-                        for(DataSnapshot likeSnapshot:dataSnapshot.getChildren()){
-                            if(likeSnapshot.getValue(String.class).equals(currentUserID)){
-                                UUID uuid = UUID.randomUUID();
-                                currentUS.child(displayUser.getUserId()).child("chat_id").setValue(uuid.toString());
-                                userMatch.child(currentUserID).child("chat_id").setValue(uuid.toString());
-                                break;
+            checkStatus.addListenerForSingleValueEvent(
+                    new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            //Get map of users in datasnapshot
+                            for(DataSnapshot likeSnapshot:dataSnapshot.getChildren()){
+                                if(likeSnapshot.getValue(String.class).equals(currentUserID)){
+                                    UUID uuid = UUID.randomUUID();
+                                    currentUS.child(displayUser.getUserId()).child("chat_id").setValue(uuid.toString());
+                                    userMatch.child(currentUserID).child("chat_id").setValue(uuid.toString());
+                                    break;
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        //handle databaseError
-                    }
-                });
-        loadUser();
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            //handle databaseError
+                        }
+                    });
+            loadUser();
     }
 
 
